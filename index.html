@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>БЕРЕГ — тихое пространство для мыслей</title>
-    <meta name="description" content="Анонимные комнаты, где можно высказаться без страха. Никто тебя не узнает. Поддержка, личный дневник, надежда.">
-    <meta name="keywords" content="анонимный чат, поддержка, психология, дневник, берег, страхи, надежда">
+    <title>БЕРЕГ — пространство мыслей</title>
+    <meta name="description" content="Анонимные комнаты, где можно высказаться без страха. Поддержка, личный дневник, тишина.">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌊%3C/text%3E%3C/svg%3E">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg: #0a0f16;
             --card: #111827dd;
-            --card-solid: #111827;
             --border: #2d3a4e;
             --text: #eef2ff;
             --text-dim: #8ba0b5;
@@ -20,12 +18,12 @@
             --accent-dark: #22c55e;
             --react-bg: #1e293b;
             --input: #0f172a;
-            --transition: all 0.2s ease;
+            --grad-start: rgba(74,222,128,0.1);
+            --grad-end: rgba(74,222,128,0);
         }
         body.light {
             --bg: #eef2f5;
             --card: #ffffffdd;
-            --card-solid: #ffffff;
             --border: #d1dce6;
             --text: #1a2a32;
             --text-dim: #5a6f82;
@@ -33,11 +31,12 @@
             --accent-dark: #1e5a45;
             --react-bg: #f1f5f9;
             --input: #ffffff;
+            --grad-start: rgba(44,122,94,0.1);
+            --grad-end: rgba(44,122,94,0);
         }
         body.mint {
             --bg: #c8e6df;
             --card: #ffffffcc;
-            --card-solid: #ffffff;
             --border: #9bc4b0;
             --text: #1a3a2a;
             --text-dim: #4a7c64;
@@ -45,37 +44,67 @@
             --accent-dark: #2c6b52;
             --react-bg: #e6f5ed;
             --input: #ffffff;
+            --grad-start: rgba(59,139,110,0.2);
+            --grad-end: rgba(59,139,110,0);
         }
         body.pink {
-            --bg: #ffe4ec;
-            --card: #ffd0dccc;
-            --card-solid: #ffd0dc;
-            --border: #f5a9b8;
-            --text: #5c1a2b;
-            --text-dim: #b83b5e;
-            --accent: #e8436e;
-            --accent-dark: #c62d55;
-            --react-bg: #fff0f3;
-            --input: #fff0f3;
+            --bg: #fce4ec;
+            --card: #ffffffcc;
+            --border: #f48fb1;
+            --text: #4a0025;
+            --text-dim: #ad1457;
+            --accent: #d81b60;
+            --accent-dark: #ad1457;
+            --react-bg: #ffe0f0;
+            --input: #ffffff;
+            --grad-start: rgba(216,27,96,0.15);
+            --grad-end: rgba(216,27,96,0);
         }
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: system-ui, 'Inter', -apple-system, 'Segoe UI', sans-serif;
+            font-family: system-ui, 'Inter', sans-serif;
             padding: 20px 16px 40px;
-            transition: var(--transition);
+            transition: background 0.3s, color 0.2s;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
-        .app { max-width: 750px; margin: 0 auto; }
+        /* плавная анимация фона */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, var(--grad-start) 0%, var(--grad-end) 70%);
+            animation: slowRotate 30s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes slowRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .app {
+            max-width: 750px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
         .glass {
             background: var(--card);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
             border: 1px solid var(--border);
             border-radius: 2rem;
             padding: 1.3rem;
             margin-bottom: 1rem;
-            transition: var(--transition);
+            transition: transform 0.2s, border-color 0.2s;
         }
-        .glass:hover { border-color: var(--accent); }
+        .glass:hover {
+            border-color: var(--accent);
+        }
         .header {
             display: flex;
             justify-content: space-between;
@@ -90,10 +119,9 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -0.5px;
         }
         .theme-select {
-            background: var(--card-solid);
+            background: var(--card);
             border: 1px solid var(--border);
             border-radius: 40px;
             padding: 6px 12px;
@@ -103,10 +131,10 @@
         }
         .hero {
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         .hero h2 {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             margin-bottom: 0.5rem;
             background: linear-gradient(135deg, var(--text), var(--accent));
             -webkit-background-clip: text;
@@ -117,9 +145,21 @@
             font-size: 0.9rem;
             color: var(--text-dim);
         }
-        .rooms-grid { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .rooms-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 16px 0;
+        }
         .room {
-            background: var(--card-solid);
+            background: var(--card);
             border-radius: 1.2rem;
             padding: 14px 18px;
             display: flex;
@@ -127,14 +167,26 @@
             align-items: center;
             cursor: pointer;
             border: 1px solid var(--border);
-            transition: var(--transition);
+            transition: all 0.1s;
         }
-        .room:hover { border-color: var(--accent); transform: scale(1.01); background: var(--card); }
-        .room:active { transform: scale(0.98); }
-        .room-left { display: flex; align-items: center; gap: 12px; }
-        .room-emoji { font-size: 1.6rem; }
-        .chat-panel { display: none; }
-        .chat-panel.active { display: block; animation: fadeIn 0.2s; }
+        .room:active {
+            transform: scale(0.98);
+        }
+        .room-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .room-emoji {
+            font-size: 1.6rem;
+        }
+        .chat-panel {
+            display: none;
+        }
+        .chat-panel.active {
+            display: block;
+            animation: fadeIn 0.2s;
+        }
         .messages {
             background: var(--input);
             border-radius: 1.2rem;
@@ -144,12 +196,13 @@
             margin-bottom: 12px;
         }
         .msg {
-            background: var(--card-solid);
+            background: var(--card);
             border-radius: 1rem;
             padding: 10px;
             margin-bottom: 12px;
             border-left: 3px solid var(--accent);
-            animation: msgAppear 0.15s ease-out;
+            transition: 0.05s;
+            animation: msgSlide 0.1s ease-out;
         }
         .msg-header {
             display: flex;
@@ -170,9 +223,12 @@
             padding: 2px 8px;
             font-size: 0.7rem;
             cursor: pointer;
-            transition: 0.05s linear;
+            transition: 0.05s;
         }
-        .react-btn:active { transform: scale(0.9); }
+        .react-btn.active-reaction {
+            background: var(--accent-dark);
+            color: white;
+        }
         .input-area {
             display: flex;
             gap: 8px;
@@ -185,9 +241,7 @@
             padding: 10px 16px;
             color: var(--text);
             font-family: inherit;
-            transition: var(--transition);
         }
-        .input-area input:focus { outline: none; border-color: var(--accent); }
         button {
             background: var(--accent-dark);
             border: none;
@@ -196,9 +250,11 @@
             cursor: pointer;
             color: white;
             font-weight: 500;
-            transition: 0.05s linear;
+            transition: 0.05s;
         }
-        button:active { transform: scale(0.96); }
+        button:active {
+            transform: scale(0.96);
+        }
         .toast {
             position: fixed;
             bottom: 20px;
@@ -213,17 +269,28 @@
             pointer-events: none;
             z-index: 1100;
         }
-        hr { border-color: var(--border); margin: 16px 0; }
         .rules {
             font-size: 0.75rem;
             color: var(--text-dim);
             text-align: center;
         }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+        .unique-count, .total-visitors {
+            background: var(--react-bg);
+            padding: 4px 10px;
+            border-radius: 30px;
+        }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        @keyframes msgAppear {
+        @keyframes msgSlide {
             from { opacity: 0; transform: translateX(-8px); }
             to { opacity: 1; transform: translateX(0); }
         }
@@ -249,9 +316,10 @@
             <p>Анонимно. Без масок. Просто поделись тем, что на душе.</p>
         </div>
         <div class="glass">
-            <div style="display: flex; justify-content: space-between;">
-                <span>✨ твоё имя: <strong id="userName">волна</strong></span>
-                <button id="newNameBtn">🌀 новое</button>
+            <div class="user-info">
+                <span>✨ твоё имя: <strong id="userName">загрузка...</strong></span>
+                <span id="nameTimer" style="font-size:0.7rem;"></span>
+                <button id="newNameBtn">🌀 другое</button>
             </div>
         </div>
         <div class="glass">
@@ -259,7 +327,7 @@
         </div>
         <div class="glass rules">
             <h4>📜 ПРАВИЛА БЕРЕГА</h4>
-            <p>✅ можно: делиться мыслями, ставить реакции (только одну на сообщение), менять имя, выбирать тему.<br>
+            <p>✅ можно: делиться мыслями, ставить реакции, менять имя, выбирать тему.<br>
             ❌ нельзя: оскорблять, спамить, выдавать себя за другого.<br>
             🌊 для кого: для тех, кто устал от шума и хочет выдохнуть.<br>
             💭 как поможет: ты поймёшь, что ты не один.</p>
@@ -275,13 +343,17 @@
                 <input type="text" id="msgInput" placeholder="напиши..." autocomplete="off">
                 <button id="sendBtn">📤 отправить</button>
             </div>
+            <div class="stats">
+                <span class="unique-count" id="uniqueCount">👤 уникальных за 24ч: --</span>
+                <span class="total-visitors" id="totalVisitors">🌊 всего посетителей: --</span>
+            </div>
         </div>
     </div>
     <div class="toast" id="toast">👍</div>
 </div>
 
 <script>
-    // ------------------- КЛЮЧИ FIREBASE (твои, скопированы из консоли) -------------------
+    // ---------- FIREBASE ----------
     const firebaseConfig = {
         apiKey: "AIzaSyBxJ0R3cvRYn3-y1BD1nJ0omB970n-aEPg",
         authDomain: "bereg-7777.firebaseapp.com",
@@ -290,119 +362,115 @@
         messagingSenderId: "1074543926192",
         appId: "1:1074543926192:web:f5cca386745cd124b1475"
     };
-    // ------------------------------------------------------------------------------------
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // 6 комнат
+    // ---------- КОМНАТЫ ----------
     const rooms = [
         { id: "pain", emoji: "🩹", name: "что болит" },
         { id: "joy", emoji: "🌸", name: "что радует" },
         { id: "thoughts", emoji: "🌙", name: "просто мысли" },
         { id: "night", emoji: "🌃", name: "никто не спит в 3 часа" },
-        { id: "fears", emoji: "🌊", name: "мои страхи" },
-        { id: "hope", emoji: "🕯️", name: "надежда и вера" }
+        { id: "fears", emoji: "😨", name: "мои страхи" },
+        { id: "hope", emoji: "🌟", name: "надежда и вера" }
     ];
 
-    // Огромный список анонимных имён (более 60 вариантов)
-    const names = [
+    // ---------- БОЛЬШОЙ СПИСОК ИМЁН (64 варианта) ----------
+    const namePool = [
         "волна", "луна", "ветер", "тишина", "свет", "море", "песок", "звезда", "туман", "рассвет",
-        "дождь", "снег", "листва", "река", "гора", "лес", "поле", "небо", "облако", "закат",
-        "утро", "вечер", "ночь", "искра", "пламя", "камень", "перо", "лист", "корень", "цветок",
-        "птица", "рыба", "зверь", "огонь", "вода", "земля", "воздух", "покой", "радость", "грусть",
-        "надежда", "вера", "любовь", "свет", "тень", "мечта", "путь", "берег", "остров", "маяк",
-        "волн", "бриз", "шум", "шепот", "эхо", "отзвук", "бездна", "высь", "простор", "тишь"
+        "закат", "прибой", "чайка", "бриз", "шторм", "шёпот", "радуга", "облако", "роса", "иней",
+        "уголь", "пламя", "листва", "корень", "пустота", "эхо", "нить", "соль", "мел", "глина",
+        "плед", "лампа", "кот", "лись", "сова", "лось", "ель", "клён", "мох", "гриб",
+        "луч", "тень", "камень", "река", "озеро", "гора", "поле", "лес", "сад", "дождь",
+        "снег", "град", "молния", "гром", "ветка", "лист", "цветок", "трава", "холм", "скала"
     ];
 
     let currentRoom = null;
-    let currentUser = localStorage.getItem("shore_user") || (names[Math.floor(Math.random()*names.length)] + "_" + Math.floor(Math.random()*1000));
-    document.getElementById("userName").innerText = currentUser;
-
-    document.getElementById("newNameBtn").onclick = () => {
-        currentUser = names[Math.floor(Math.random()*names.length)] + "_" + Math.floor(Math.random()*900+100);
-        localStorage.setItem("shore_user", currentUser);
-        document.getElementById("userName").innerText = currentUser;
-        showToast("🌀 теперь ты " + currentUser);
-    };
-
+    let currentUser = null;
+    let userNameExpiry = null;
     let unsubscribe = null;
+    let totalVisitors = 0;
 
-    // Определяем ID текущего пользователя (по local storage)
-    let userId = localStorage.getItem("shore_user_id");
-    if (!userId) {
-        userId = "user_" + Date.now() + "_" + Math.random();
-        localStorage.setItem("shore_user_id", userId);
+    // --- управление именем (24 часа) ---
+    function loadOrCreateUser() {
+        const saved = localStorage.getItem("shore_user");
+        const savedExpiry = localStorage.getItem("shore_user_expiry");
+        const now = Date.now();
+        if (saved && savedExpiry && now < parseInt(savedExpiry)) {
+            currentUser = saved;
+            userNameExpiry = parseInt(savedExpiry);
+        } else {
+            const randomName = namePool[Math.floor(Math.random() * namePool.length)] + "_" + Math.floor(Math.random() * 900 + 100);
+            currentUser = randomName;
+            userNameExpiry = now + 86400000; // 24 часа
+            localStorage.setItem("shore_user", currentUser);
+            localStorage.setItem("shore_user_expiry", userNameExpiry);
+            // увеличить счётчик всех посетителей
+            let total = localStorage.getItem("total_visitors");
+            total = total ? parseInt(total) + 1 : 1;
+            localStorage.setItem("total_visitors", total);
+            document.getElementById("totalVisitors").innerText = `🌊 всего посетителей: ${total}`;
+        }
+        document.getElementById("userName").innerText = currentUser;
+        updateNameTimer();
     }
 
-    function renderMessagesSnapshot(roomId) {
-        if (unsubscribe) unsubscribe();
-        const messagesRef = db.collection("rooms").doc(roomId).collection("messages").orderBy("time", "asc");
-        unsubscribe = messagesRef.onSnapshot(snapshot => {
-            const container = document.getElementById("msgContainer");
-            if (!container) return;
-            let html = "";
-            snapshot.forEach(doc => {
-                const msg = doc.data();
-                // Проверяем, поставил ли текущий пользователь реакцию на это сообщение
-                let myReaction = null;
-                if (msg.userReactions && msg.userReactions[userId]) {
-                    myReaction = msg.userReactions[userId];
+    function updateNameTimer() {
+        const remaining = userNameExpiry - Date.now();
+        if (remaining <= 0) {
+            loadOrCreateUser();
+            return;
+        }
+        const hours = Math.floor(remaining / 3600000);
+        const minutes = Math.floor((remaining % 3600000) / 60000);
+        document.getElementById("nameTimer").innerHTML = `⏳ ${hours}ч ${minutes}м`;
+        setTimeout(updateNameTimer, 60000);
+    }
+
+    function forceNewName() {
+        const newName = namePool[Math.floor(Math.random() * namePool.length)] + "_" + Math.floor(Math.random() * 900 + 100);
+        currentUser = newName;
+        userNameExpiry = Date.now() + 86400000;
+        localStorage.setItem("shore_user", currentUser);
+        localStorage.setItem("shore_user_expiry", userNameExpiry);
+        document.getElementById("userName").innerText = currentUser;
+        updateNameTimer();
+        showToast("🌀 новое имя выдано на 24 часа");
+        // не увеличиваем total_visitors при принудительной смене
+    }
+
+    // --- реакции (один пользователь — одна реакция) ---
+    async function setReaction(roomId, msgId, reactionType) {
+        const userId = localStorage.getItem("shore_user") || currentUser;
+        const reactionDocRef = db.collection("rooms").doc(roomId).collection("messages").doc(msgId).collection("reactions").doc(userId);
+        const msgRef = db.collection("rooms").doc(roomId).collection("messages").doc(msgId);
+        await db.runTransaction(async (transaction) => {
+            const reactionDoc = await transaction.get(reactionDocRef);
+            const msgDoc = await transaction.get(msgRef);
+            if (!msgDoc.exists) return;
+            let currentReacts = msgDoc.data().reacts || { like:0, heart:0, sad:0, fire:0 };
+            if (reactionDoc.exists) {
+                const oldType = reactionDoc.data().type;
+                if (oldType === reactionType) {
+                    // снять реакцию
+                    currentReacts[oldType] = Math.max(0, (currentReacts[oldType] || 0) - 1);
+                    transaction.delete(reactionDocRef);
+                } else {
+                    // заменить реакцию
+                    currentReacts[oldType] = Math.max(0, (currentReacts[oldType] || 0) - 1);
+                    currentReacts[reactionType] = (currentReacts[reactionType] || 0) + 1;
+                    transaction.set(reactionDocRef, { type: reactionType });
                 }
-                // формируем кнопки, подсвечивая активную реакцию
-                const likeClass = myReaction === 'like' ? 'active' : '';
-                const heartClass = myReaction === 'heart' ? 'active' : '';
-                const sadClass = myReaction === 'sad' ? 'active' : '';
-                const fireClass = myReaction === 'fire' ? 'active' : '';
-                html += `
-                    <div class="msg" data-id="${doc.id}">
-                        <div class="msg-header"><span>🌊 ${escapeHtml(msg.user)}</span><span>${new Date(msg.time).toLocaleTimeString()}</span></div>
-                        <div>${escapeHtml(msg.text)}</div>
-                        <div class="react-buttons">
-                            <button class="react-btn ${likeClass}" data-type="like">👍 ${msg.reacts?.like || 0}</button>
-                            <button class="react-btn ${heartClass}" data-type="heart">❤️ ${msg.reacts?.heart || 0}</button>
-                            <button class="react-btn ${sadClass}" data-type="sad">😢 ${msg.reacts?.sad || 0}</button>
-                            <button class="react-btn ${fireClass}" data-type="fire">🔥 ${msg.reacts?.fire || 0}</button>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-            container.scrollTop = container.scrollHeight;
-            // прикрепляем обработчики кликов
-            document.querySelectorAll(".react-btn").forEach(btn => {
-                btn.onclick = async (e) => {
-                    e.stopPropagation();
-                    const type = btn.getAttribute("data-type");
-                    const msgDiv = btn.closest(".msg");
-                    const msgId = msgDiv.getAttribute("data-id");
-                    const msgRef = db.collection("rooms").doc(roomId).collection("messages").doc(msgId);
-                    await db.runTransaction(async (transaction) => {
-                        const doc = await transaction.get(msgRef);
-                        if (!doc.exists) return;
-                        const data = doc.data();
-                        let reacts = data.reacts || { like:0, heart:0, sad:0, fire:0 };
-                        let userReactions = data.userReactions || {};
-                        const oldReaction = userReactions[userId] || null;
-                        // Если пользователь уже поставил такую же реакцию — удаляем её
-                        if (oldReaction === type) {
-                            reacts[type] = Math.max(0, (reacts[type] || 0) - 1);
-                            delete userReactions[userId];
-                        } else {
-                            // Если была другая реакция — убираем её
-                            if (oldReaction) {
-                                reacts[oldReaction] = Math.max(0, (reacts[oldReaction] || 0) - 1);
-                            }
-                            // Добавляем новую
-                            reacts[type] = (reacts[type] || 0) + 1;
-                            userReactions[userId] = type;
-                        }
-                        transaction.update(msgRef, { reacts, userReactions });
-                    });
-                };
-            });
+            } else {
+                // новая реакция
+                currentReacts[reactionType] = (currentReacts[reactionType] || 0) + 1;
+                transaction.set(reactionDocRef, { type: reactionType });
+            }
+            transaction.update(msgRef, { reacts: currentReacts });
         });
     }
 
+    // --- отправка сообщения ---
     async function sendMessage() {
         const input = document.getElementById("msgInput");
         const text = input.value.trim();
@@ -413,11 +481,59 @@
             user: currentUser,
             text: text,
             time: Date.now(),
-            reacts: { like:0, heart:0, sad:0, fire:0 },
-            userReactions: {}
+            reacts: { like:0, heart:0, sad:0, fire:0 }
         });
         input.value = "";
         showToast("💬 отправлено");
+    }
+
+    // --- отображение сообщений и реакций ---
+    function renderMessagesSnapshot(roomId) {
+        if (unsubscribe) unsubscribe();
+        const messagesRef = db.collection("rooms").doc(roomId).collection("messages").orderBy("time", "asc");
+        unsubscribe = messagesRef.onSnapshot(async (snapshot) => {
+            const container = document.getElementById("msgContainer");
+            if (!container) return;
+            let html = "";
+            const userId = localStorage.getItem("shore_user") || currentUser;
+            for (const doc of snapshot.docs) {
+                const msg = doc.data();
+                // получаем тип реакции текущего пользователя
+                const reactionDoc = await db.collection("rooms").doc(roomId).collection("messages").doc(doc.id).collection("reactions").doc(userId).get();
+                const userReaction = reactionDoc.exists ? reactionDoc.data().type : null;
+                html += `
+                    <div class="msg" data-id="${doc.id}">
+                        <div class="msg-header"><span>🌊 ${escapeHtml(msg.user)}</span><span>${new Date(msg.time).toLocaleTimeString()}</span></div>
+                        <div>${escapeHtml(msg.text)}</div>
+                        <div class="react-buttons">
+                            <button class="react-btn ${userReaction === 'like' ? 'active-reaction' : ''}" data-type="like">👍 ${msg.reacts?.like || 0}</button>
+                            <button class="react-btn ${userReaction === 'heart' ? 'active-reaction' : ''}" data-type="heart">❤️ ${msg.reacts?.heart || 0}</button>
+                            <button class="react-btn ${userReaction === 'sad' ? 'active-reaction' : ''}" data-type="sad">😢 ${msg.reacts?.sad || 0}</button>
+                            <button class="react-btn ${userReaction === 'fire' ? 'active-reaction' : ''}" data-type="fire">🔥 ${msg.reacts?.fire || 0}</button>
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+            // прикрепить обработчики реакций
+            document.querySelectorAll(".msg").forEach(msgDiv => {
+                const msgId = msgDiv.getAttribute("data-id");
+                msgDiv.querySelectorAll(".react-btn").forEach(btn => {
+                    btn.onclick = async (e) => {
+                        e.stopPropagation();
+                        const type = btn.getAttribute("data-type");
+                        await setReaction(roomId, msgId, type);
+                    };
+                });
+            });
+            // подсчёт уникальных никнеймов в комнате за 24ч
+            const now = Date.now();
+            const dayAgo = now - 86400000;
+            const allMessages = snapshot.docs.map(d => d.data());
+            const uniqueNames = new Set(allMessages.filter(m => m.time > dayAgo).map(m => m.user));
+            document.getElementById("uniqueCount").innerHTML = `👤 уникальных за 24ч: ${uniqueNames.size}`;
+        });
     }
 
     function escapeHtml(str) {
@@ -429,15 +545,15 @@
         });
     }
 
-    function showToast(t) {
-        let toast = document.getElementById("toast");
-        toast.innerText = t;
+    function showToast(msg) {
+        const toast = document.getElementById("toast");
+        toast.innerText = msg;
         toast.style.opacity = "1";
         setTimeout(() => toast.style.opacity = "0", 1500);
     }
 
     function renderRooms() {
-        let container = document.getElementById("roomsList");
+        const container = document.getElementById("roomsList");
         container.innerHTML = rooms.map(room => `
             <div class="room" data-id="${room.id}">
                 <div class="room-left"><div class="room-emoji">${room.emoji}</div><div>${room.name}</div></div>
@@ -452,7 +568,7 @@
     function openChat(roomId) {
         if (currentRoom && unsubscribe) unsubscribe();
         currentRoom = roomId;
-        let room = rooms.find(r => r.id === roomId);
+        const room = rooms.find(r => r.id === roomId);
         document.getElementById("roomTitle").innerText = room.emoji + " " + room.name;
         document.getElementById("mainPanel").style.display = "none";
         document.getElementById("chatPanel").classList.add("active");
@@ -466,36 +582,40 @@
         document.getElementById("chatPanel").classList.remove("active");
     }
 
-    // Тема
+    // --- темы ---
     function setTheme(theme) {
         document.body.classList.remove("light", "mint", "pink");
-        if(theme === "light") document.body.classList.add("light");
-        if(theme === "mint") document.body.classList.add("mint");
-        if(theme === "pink") document.body.classList.add("pink");
+        if (theme === "light") document.body.classList.add("light");
+        else if (theme === "mint") document.body.classList.add("mint");
+        else if (theme === "pink") document.body.classList.add("pink");
         localStorage.setItem("shore_theme", theme);
     }
-    let savedTheme = localStorage.getItem("shore_theme") || "dark";
+    const savedTheme = localStorage.getItem("shore_theme") || "dark";
     setTheme(savedTheme);
     document.getElementById("themeSelect").value = savedTheme;
     document.getElementById("themeSelect").onchange = (e) => setTheme(e.target.value);
 
-    // Приветственный экран
-    if(!localStorage.getItem("welcomed")) {
-        let div = document.createElement("div");
+    // --- инициализация ---
+    loadOrCreateUser();
+    renderRooms();
+
+    // --- обработчики кнопок ---
+    document.getElementById("newNameBtn").onclick = forceNewName;
+    document.getElementById("backBtn").onclick = closeChat;
+    document.getElementById("sendBtn").onclick = sendMessage;
+    document.getElementById("msgInput").addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+
+    // --- приветствие (один раз) ---
+    if (!localStorage.getItem("welcomed")) {
+        const div = document.createElement("div");
         div.className = "welcome-overlay";
-        div.innerHTML = `<div class="welcome-card"><h2>🌊 добро пожаловать на БЕРЕГ</h2><p>выбери слой, напиши что чувствуешь — анонимно, без страха.<br>ставь реакции (только одну на сообщение), меняй имя, дыши.</p><button id="closeWelcome">⟳ начать</button></div>`;
+        div.innerHTML = `<div class="welcome-card"><h2>🌊 добро пожаловать на БЕРЕГ</h2><p>выбери слой, напиши что чувствуешь — анонимно, без страха.<br>ставь реакции, меняй имя, дыши.</p><button id="closeWelcome">⟳ начать</button></div>`;
         document.body.appendChild(div);
         div.querySelector("#closeWelcome").onclick = () => {
             div.remove();
             localStorage.setItem("welcomed", "true");
         };
     }
-
-    document.getElementById("backBtn").onclick = closeChat;
-    document.getElementById("sendBtn").onclick = sendMessage;
-    document.getElementById("msgInput").addEventListener("keypress", (e) => { if(e.key === "Enter") sendMessage(); });
-
-    renderRooms();
 </script>
 </body>
 </html>
