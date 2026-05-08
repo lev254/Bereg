@@ -1,17 +1,15 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>БЕРЕГ — пространство мыслей</title>
+    <title>БЕРЕГ — анонимное пространство мыслей</title>
+    <meta name="description" content="Анонимные комнаты, где можно высказаться без страха. Поддержка, личный дневник, тишина.">
+    <meta name="keywords" content="анонимный чат, поддержка, психология, дневник, берег, выговориться">
+    <meta name="author" content="Берег">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌊%3C/text%3E%3C/svg%3E">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Темы */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg: #0a0f16;
             --card: #111827dd;
@@ -23,8 +21,8 @@
             --accent-dark: #22c55e;
             --react-bg: #1e293b;
             --input: #0f172a;
+            --transition: all 0.2s ease;
         }
-
         body.light {
             --bg: #eef2f5;
             --card: #ffffffdd;
@@ -37,7 +35,6 @@
             --react-bg: #f1f5f9;
             --input: #ffffff;
         }
-
         body.mint {
             --bg: #c8e6df;
             --card: #ffffffcc;
@@ -50,21 +47,14 @@
             --react-bg: #e6f5ed;
             --input: #ffffff;
         }
-
         body {
             background: var(--bg);
             color: var(--text);
             font-family: system-ui, 'Inter', -apple-system, sans-serif;
             padding: 20px 16px 40px;
-            transition: all 0.2s;
+            transition: var(--transition);
         }
-
-        .app {
-            max-width: 750px;
-            margin: 0 auto;
-        }
-
-        /* стеклянные карточки */
+        .app { max-width: 750px; margin: 0 auto; }
         .glass {
             background: var(--card);
             backdrop-filter: blur(8px);
@@ -72,8 +62,9 @@
             border-radius: 2rem;
             padding: 1.3rem;
             margin-bottom: 1rem;
+            transition: var(--transition);
         }
-
+        .glass:hover { border-color: var(--accent); }
         .header {
             display: flex;
             justify-content: space-between;
@@ -81,7 +72,6 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-
         .logo {
             font-size: 2rem;
             font-weight: 800;
@@ -90,7 +80,6 @@
             background-clip: text;
             color: transparent;
         }
-
         .theme-select {
             background: var(--card-solid);
             border: 1px solid var(--border);
@@ -98,21 +87,37 @@
             padding: 6px 12px;
             color: var(--text);
             font-family: inherit;
+            cursor: pointer;
         }
-
-        /* приветственное окно */
+        .hero {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .hero h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
         .welcome-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            animation: fadeIn 0.2s ease;
         }
         .welcome-card {
             background: var(--card-solid);
@@ -121,15 +126,9 @@
             max-width: 400px;
             text-align: center;
             border: 1px solid var(--accent);
+            animation: slideUp 0.2s ease;
         }
-
-        /* комнаты */
-        .rooms-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 16px 0;
-        }
+        .rooms-grid { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
         .room {
             background: var(--card-solid);
             border-radius: 1.2rem;
@@ -139,18 +138,19 @@
             align-items: center;
             cursor: pointer;
             border: 1px solid var(--border);
+            transition: var(--transition);
         }
+        .room:hover { border-color: var(--accent); transform: scale(1.01); background: var(--card); }
+        .room:active { transform: scale(0.98); }
         .room-left { display: flex; align-items: center; gap: 12px; }
         .room-emoji { font-size: 1.6rem; }
-
-        /* чат */
         .chat-panel { display: none; }
-        .chat-panel.active { display: block; }
+        .chat-panel.active { display: block; animation: fadeIn 0.2s; }
         .messages {
             background: var(--input);
             border-radius: 1.2rem;
             padding: 12px;
-            height: 400px;
+            height: 420px;
             overflow-y: auto;
             margin-bottom: 12px;
         }
@@ -160,6 +160,7 @@
             padding: 10px;
             margin-bottom: 12px;
             border-left: 3px solid var(--accent);
+            animation: msgAppear 0.15s ease-out;
         }
         .msg-header {
             display: flex;
@@ -180,13 +181,9 @@
             padding: 2px 8px;
             font-size: 0.7rem;
             cursor: pointer;
+            transition: 0.05s linear;
         }
-        .views {
-            font-size: 0.6rem;
-            color: var(--text-dim);
-            margin-top: 6px;
-        }
-
+        .react-btn:active { transform: scale(0.9); }
         .input-area {
             display: flex;
             gap: 8px;
@@ -198,9 +195,20 @@
             border-radius: 60px;
             padding: 10px 16px;
             color: var(--text);
+            font-family: inherit;
         }
-
-        button { background: var(--accent-dark); border: none; border-radius: 40px; padding: 8px 16px; cursor: pointer; color: white; }
+        .input-area input:focus { outline: none; border-color: var(--accent); }
+        button {
+            background: var(--accent-dark);
+            border: none;
+            border-radius: 40px;
+            padding: 8px 16px;
+            cursor: pointer;
+            color: white;
+            font-weight: 500;
+            transition: 0.05s linear;
+        }
+        button:active { transform: scale(0.96); }
         .toast {
             position: fixed;
             bottom: 20px;
@@ -221,7 +229,12 @@
             color: var(--text-dim);
             text-align: center;
         }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes msgAppear { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <div class="app">
@@ -234,8 +247,11 @@
         </select>
     </div>
 
-    <!-- Главный экран -->
     <div id="mainPanel">
+        <div class="glass hero">
+            <h2>место, где можно выдохнуть</h2>
+            <p>Анонимно. Без масок. Просто поделись тем, что на душе.</p>
+        </div>
         <div class="glass">
             <div style="display: flex; justify-content: space-between;">
                 <span>✨ твоё имя: <strong id="userName">волна</strong></span>
@@ -254,7 +270,6 @@
         </div>
     </div>
 
-    <!-- Чат -->
     <div id="chatPanel" class="chat-panel">
         <div class="glass">
             <button id="backBtn">← назад</button>
@@ -262,7 +277,7 @@
             <div class="messages" id="msgContainer"></div>
             <div class="input-area">
                 <input type="text" id="msgInput" placeholder="напиши..." autocomplete="off">
-                <button id="sendBtn">📤</button>
+                <button id="sendBtn">📤 отправить</button>
             </div>
         </div>
     </div>
@@ -270,7 +285,18 @@
 </div>
 
 <script>
-    // ------------------- КОМНАТЫ -------------------
+    // Firebase configuration (твои ключи из консоли)
+    const firebaseConfig = {
+        apiKey: "AIzaSyBxJ0R3cvRYn3-y1BD1nJ0omB970n-aEPg",
+        authDomain: "bereg-7777.firebaseapp.com",
+        projectId: "bereg-7777",
+        storageBucket: "bereg-7777.firebasestorage.app",
+        messagingSenderId: "1074543926192",
+        appId: "1:1074543926192:web:f5cca386745cd124b1475"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     const rooms = [
         { id: "pain", emoji: "🩹", name: "что болит" },
         { id: "joy", emoji: "🌸", name: "что радует" },
@@ -279,100 +305,76 @@
     ];
 
     let currentRoom = null;
-    let currentUser = localStorage.getItem("shore_user") || ("волна_" + Math.floor(Math.random()*100));
+    let currentUser = localStorage.getItem("shore_user") || ("волна_" + Math.floor(Math.random()*1000));
     document.getElementById("userName").innerText = currentUser;
 
-    // Имена для генерации
     const names = ["волна", "луна", "ветер", "тишина", "свет", "море", "песок", "звезда", "туман", "рассвет"];
     document.getElementById("newNameBtn").onclick = () => {
-        currentUser = names[Math.floor(Math.random()*names.length)] + "_" + Math.floor(Math.random()*90+10);
+        currentUser = names[Math.floor(Math.random()*names.length)] + "_" + Math.floor(Math.random()*900+100);
         localStorage.setItem("shore_user", currentUser);
         document.getElementById("userName").innerText = currentUser;
         showToast("🌀 теперь ты " + currentUser);
-        if(currentRoom) renderMessages();
     };
 
-    // ---------- РАБОТА С ДАННЫМИ ----------
-    function getData(roomId) {
-        let raw = localStorage.getItem(`shore_${roomId}`);
-        return raw ? JSON.parse(raw) : { messages: [], views: 0 };
-    }
-    function saveData(roomId, data) {
-        localStorage.setItem(`shore_${roomId}`, JSON.stringify(data));
+    let unsubscribe = null;
+
+    function renderMessagesSnapshot(roomId) {
+        if (unsubscribe) unsubscribe();
+        const messagesRef = db.collection("rooms").doc(roomId).collection("messages").orderBy("time", "asc");
+        unsubscribe = messagesRef.onSnapshot(snapshot => {
+            const container = document.getElementById("msgContainer");
+            if (!container) return;
+            let html = "";
+            snapshot.forEach(doc => {
+                const msg = doc.data();
+                html += `
+                    <div class="msg" data-id="${doc.id}">
+                        <div class="msg-header"><span>🌊 ${escapeHtml(msg.user)}</span><span>${new Date(msg.time).toLocaleTimeString()}</span></div>
+                        <div>${escapeHtml(msg.text)}</div>
+                        <div class="react-buttons">
+                            <button class="react-btn" data-type="like">👍 ${msg.reacts?.like || 0}</button>
+                            <button class="react-btn" data-type="heart">❤️ ${msg.reacts?.heart || 0}</button>
+                            <button class="react-btn" data-type="sad">😢 ${msg.reacts?.sad || 0}</button>
+                            <button class="react-btn" data-type="fire">🔥 ${msg.reacts?.fire || 0}</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+            document.querySelectorAll(".react-btn").forEach(btn => {
+                btn.onclick = async (e) => {
+                    e.stopPropagation();
+                    const type = btn.getAttribute("data-type");
+                    const msgDiv = btn.closest(".msg");
+                    const msgId = msgDiv.getAttribute("data-id");
+                    const msgRef = db.collection("rooms").doc(roomId).collection("messages").doc(msgId);
+                    await db.runTransaction(async (transaction) => {
+                        const doc = await transaction.get(msgRef);
+                        if (!doc.exists) return;
+                        const reacts = doc.data().reacts || {};
+                        reacts[type] = (reacts[type] || 0) + 1;
+                        transaction.update(msgRef, { reacts });
+                    });
+                };
+            });
+        });
     }
 
-    function addMessage(roomId, text) {
-        let data = getData(roomId);
-        data.messages.push({
-            id: Date.now(),
+    async function sendMessage() {
+        const input = document.getElementById("msgInput");
+        const text = input.value.trim();
+        if (!text || !currentRoom) return;
+        if (text.length > 500) { showToast("Максимум 500 символов"); return; }
+        const messagesRef = db.collection("rooms").doc(currentRoom).collection("messages");
+        await messagesRef.add({
             user: currentUser,
-            text: text.slice(0, 500),
+            text: text,
             time: Date.now(),
             reacts: { like:0, heart:0, sad:0, fire:0 }
         });
-        saveData(roomId, data);
-        renderMessages();
-    }
-
-    function addReaction(roomId, msgId, type) {
-        let data = getData(roomId);
-        let msg = data.messages.find(m => m.id == msgId);
-        if(msg) {
-            msg.reacts[type] = (msg.reacts[type] || 0) + 1;
-            saveData(roomId, data);
-            renderMessages();
-        }
-    }
-
-    function incrementViews(roomId) {
-        let data = getData(roomId);
-        data.views = (data.views || 0) + 1;
-        saveData(roomId, data);
-        renderMessages();
-    }
-
-    function renderMessages() {
-        if(!currentRoom) return;
-        let data = getData(currentRoom);
-        let container = document.getElementById("msgContainer");
-        container.innerHTML = data.messages.map(msg => `
-            <div class="msg">
-                <div class="msg-header"><span>🌊 ${escapeHtml(msg.user)}</span><span>${new Date(msg.time).toLocaleTimeString()}</span></div>
-                <div>${escapeHtml(msg.text)}</div>
-                <div class="react-buttons">
-                    <button class="react-btn" data-id="${msg.id}" data-type="like">👍 ${msg.reacts.like || 0}</button>
-                    <button class="react-btn" data-id="${msg.id}" data-type="heart">❤️ ${msg.reacts.heart || 0}</button>
-                    <button class="react-btn" data-id="${msg.id}" data-type="sad">😢 ${msg.reacts.sad || 0}</button>
-                    <button class="react-btn" data-id="${msg.id}" data-type="fire">🔥 ${msg.reacts.fire || 0}</button>
-                </div>
-                <div class="views">👁️ просмотров: ${data.views || 0}</div>
-            </div>
-        `).join("");
-        // вешаем события на реакции
-        document.querySelectorAll(".react-btn").forEach(btn => {
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                let id = btn.getAttribute("data-id");
-                let type = btn.getAttribute("data-type");
-                addReaction(currentRoom, id, type);
-            };
-        });
-        container.scrollTop = container.scrollHeight;
-        // увеличить счётчик просмотров один раз за сессию
-        let viewed = sessionStorage.getItem(`viewed_${currentRoom}`);
-        if(!viewed) {
-            incrementViews(currentRoom);
-            sessionStorage.setItem(`viewed_${currentRoom}`, 'yes');
-        }
-    }
-
-    function sendMessage() {
-        let input = document.getElementById("msgInput");
-        let text = input.value.trim();
-        if(text) {
-            addMessage(currentRoom, text);
-            input.value = "";
-        }
+        input.value = "";
+        showToast("💬 отправлено");
     }
 
     function escapeHtml(str) {
@@ -391,7 +393,6 @@
         setTimeout(() => toast.style.opacity = "0", 1500);
     }
 
-    // UI рендер комнат
     function renderRooms() {
         let container = document.getElementById("roomsList");
         container.innerHTML = rooms.map(room => `
@@ -406,21 +407,22 @@
     }
 
     function openChat(roomId) {
+        if (currentRoom && unsubscribe) unsubscribe();
         currentRoom = roomId;
         let room = rooms.find(r => r.id === roomId);
         document.getElementById("roomTitle").innerText = room.emoji + " " + room.name;
         document.getElementById("mainPanel").style.display = "none";
         document.getElementById("chatPanel").classList.add("active");
-        renderMessages();
+        renderMessagesSnapshot(roomId);
     }
 
     function closeChat() {
+        if (unsubscribe) unsubscribe();
+        currentRoom = null;
         document.getElementById("mainPanel").style.display = "block";
         document.getElementById("chatPanel").classList.remove("active");
-        currentRoom = null;
     }
 
-    // ТЕМЫ
     function setTheme(theme) {
         document.body.classList.remove("light", "mint");
         if(theme === "light") document.body.classList.add("light");
@@ -432,7 +434,6 @@
     document.getElementById("themeSelect").value = savedTheme;
     document.getElementById("themeSelect").onchange = (e) => setTheme(e.target.value);
 
-    // ПРИВЕТСТВИЕ
     if(!localStorage.getItem("welcomed")) {
         let div = document.createElement("div");
         div.className = "welcome-overlay";
@@ -444,25 +445,11 @@
         };
     }
 
-    // КНОПКИ
     document.getElementById("backBtn").onclick = closeChat;
     document.getElementById("sendBtn").onclick = sendMessage;
     document.getElementById("msgInput").addEventListener("keypress", (e) => { if(e.key === "Enter") sendMessage(); });
 
     renderRooms();
-    // автоочистка старых сообщений (24ч)
-    setInterval(() => {
-        let limit = Date.now() - 86400000;
-        rooms.forEach(room => {
-            let data = getData(room.id);
-            let filtered = data.messages.filter(m => m.time > limit);
-            if(filtered.length !== data.messages.length) {
-                data.messages = filtered;
-                saveData(room.id, data);
-                if(currentRoom === room.id) renderMessages();
-            }
-        });
-    }, 3600000);
 </script>
 </body>
 </html>
