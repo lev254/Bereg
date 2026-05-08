@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>БЕРЕГ — анонимное пространство мыслей</title>
-    <meta name="description" content="Анонимные комнаты, где можно высказаться без страха. Поддержка, личный дневник, тишина.">
-    <meta name="keywords" content="анонимный чат, поддержка, психология, дневник, берег, выговориться">
-    <meta name="author" content="Берег">
+    <title>БЕРЕГ — тихое пространство для мыслей</title>
+    <meta name="description" content="Анонимные комнаты, где можно высказаться без страха. Никто тебя не узнает. Поддержка, личный дневник, надежда.">
+    <meta name="keywords" content="анонимный чат, поддержка, психология, дневник, берег, страхи, надежда">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌊%3C/text%3E%3C/svg%3E">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,10 +46,22 @@
             --react-bg: #e6f5ed;
             --input: #ffffff;
         }
+        body.pink {
+            --bg: #ffe4ec;
+            --card: #ffd0dccc;
+            --card-solid: #ffd0dc;
+            --border: #f5a9b8;
+            --text: #5c1a2b;
+            --text-dim: #b83b5e;
+            --accent: #e8436e;
+            --accent-dark: #c62d55;
+            --react-bg: #fff0f3;
+            --input: #fff0f3;
+        }
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: system-ui, 'Inter', -apple-system, sans-serif;
+            font-family: system-ui, 'Inter', -apple-system, 'Segoe UI', sans-serif;
             padding: 20px 16px 40px;
             transition: var(--transition);
         }
@@ -79,6 +90,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            letter-spacing: -0.5px;
         }
         .theme-select {
             background: var(--card-solid);
@@ -104,29 +116,6 @@
         .hero p {
             font-size: 0.9rem;
             color: var(--text-dim);
-        }
-        .welcome-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(12px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            animation: fadeIn 0.2s ease;
-        }
-        .welcome-card {
-            background: var(--card-solid);
-            border-radius: 2rem;
-            padding: 2rem;
-            max-width: 400px;
-            text-align: center;
-            border: 1px solid var(--accent);
-            animation: slideUp 0.2s ease;
         }
         .rooms-grid { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
         .room {
@@ -196,6 +185,7 @@
             padding: 10px 16px;
             color: var(--text);
             font-family: inherit;
+            transition: var(--transition);
         }
         .input-area input:focus { outline: none; border-color: var(--accent); }
         button {
@@ -229,9 +219,14 @@
             color: var(--text-dim);
             text-align: center;
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes msgAppear { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes msgAppear {
+            from { opacity: 0; transform: translateX(-8px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
     </style>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -244,6 +239,7 @@
             <option value="dark">🌙 тёмный</option>
             <option value="light">☀️ светлый</option>
             <option value="mint">🍃 мятный</option>
+            <option value="pink">🌸 розовый</option>
         </select>
     </div>
 
@@ -263,7 +259,7 @@
         </div>
         <div class="glass rules">
             <h4>📜 ПРАВИЛА БЕРЕГА</h4>
-            <p>✅ можно: делиться мыслями, ставить реакции, менять имя, выбирать тему.<br>
+            <p>✅ можно: делиться мыслями, ставить реакции (только одну на сообщение), менять имя, выбирать тему.<br>
             ❌ нельзя: оскорблять, спамить, выдавать себя за другого.<br>
             🌊 для кого: для тех, кто устал от шума и хочет выдохнуть.<br>
             💭 как поможет: ты поймёшь, что ты не один.</p>
@@ -285,7 +281,7 @@
 </div>
 
 <script>
-    // Firebase configuration (твои ключи из консоли)
+    // ------------------- КЛЮЧИ FIREBASE (твои, скопированы из консоли) -------------------
     const firebaseConfig = {
         apiKey: "AIzaSyBxJ0R3cvRYn3-y1BD1nJ0omB970n-aEPg",
         authDomain: "bereg-7777.firebaseapp.com",
@@ -294,21 +290,34 @@
         messagingSenderId: "1074543926192",
         appId: "1:1074543926192:web:f5cca386745cd124b1475"
     };
+    // ------------------------------------------------------------------------------------
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
+    // 6 комнат
     const rooms = [
         { id: "pain", emoji: "🩹", name: "что болит" },
         { id: "joy", emoji: "🌸", name: "что радует" },
         { id: "thoughts", emoji: "🌙", name: "просто мысли" },
-        { id: "night", emoji: "🌃", name: "никто не спит в 3 часа" }
+        { id: "night", emoji: "🌃", name: "никто не спит в 3 часа" },
+        { id: "fears", emoji: "🌊", name: "мои страхи" },
+        { id: "hope", emoji: "🕯️", name: "надежда и вера" }
+    ];
+
+    // Огромный список анонимных имён (более 60 вариантов)
+    const names = [
+        "волна", "луна", "ветер", "тишина", "свет", "море", "песок", "звезда", "туман", "рассвет",
+        "дождь", "снег", "листва", "река", "гора", "лес", "поле", "небо", "облако", "закат",
+        "утро", "вечер", "ночь", "искра", "пламя", "камень", "перо", "лист", "корень", "цветок",
+        "птица", "рыба", "зверь", "огонь", "вода", "земля", "воздух", "покой", "радость", "грусть",
+        "надежда", "вера", "любовь", "свет", "тень", "мечта", "путь", "берег", "остров", "маяк",
+        "волн", "бриз", "шум", "шепот", "эхо", "отзвук", "бездна", "высь", "простор", "тишь"
     ];
 
     let currentRoom = null;
-    let currentUser = localStorage.getItem("shore_user") || ("волна_" + Math.floor(Math.random()*1000));
+    let currentUser = localStorage.getItem("shore_user") || (names[Math.floor(Math.random()*names.length)] + "_" + Math.floor(Math.random()*1000));
     document.getElementById("userName").innerText = currentUser;
 
-    const names = ["волна", "луна", "ветер", "тишина", "свет", "море", "песок", "звезда", "туман", "рассвет"];
     document.getElementById("newNameBtn").onclick = () => {
         currentUser = names[Math.floor(Math.random()*names.length)] + "_" + Math.floor(Math.random()*900+100);
         localStorage.setItem("shore_user", currentUser);
@@ -317,6 +326,13 @@
     };
 
     let unsubscribe = null;
+
+    // Определяем ID текущего пользователя (по local storage)
+    let userId = localStorage.getItem("shore_user_id");
+    if (!userId) {
+        userId = "user_" + Date.now() + "_" + Math.random();
+        localStorage.setItem("shore_user_id", userId);
+    }
 
     function renderMessagesSnapshot(roomId) {
         if (unsubscribe) unsubscribe();
@@ -327,21 +343,32 @@
             let html = "";
             snapshot.forEach(doc => {
                 const msg = doc.data();
+                // Проверяем, поставил ли текущий пользователь реакцию на это сообщение
+                let myReaction = null;
+                if (msg.userReactions && msg.userReactions[userId]) {
+                    myReaction = msg.userReactions[userId];
+                }
+                // формируем кнопки, подсвечивая активную реакцию
+                const likeClass = myReaction === 'like' ? 'active' : '';
+                const heartClass = myReaction === 'heart' ? 'active' : '';
+                const sadClass = myReaction === 'sad' ? 'active' : '';
+                const fireClass = myReaction === 'fire' ? 'active' : '';
                 html += `
                     <div class="msg" data-id="${doc.id}">
                         <div class="msg-header"><span>🌊 ${escapeHtml(msg.user)}</span><span>${new Date(msg.time).toLocaleTimeString()}</span></div>
                         <div>${escapeHtml(msg.text)}</div>
                         <div class="react-buttons">
-                            <button class="react-btn" data-type="like">👍 ${msg.reacts?.like || 0}</button>
-                            <button class="react-btn" data-type="heart">❤️ ${msg.reacts?.heart || 0}</button>
-                            <button class="react-btn" data-type="sad">😢 ${msg.reacts?.sad || 0}</button>
-                            <button class="react-btn" data-type="fire">🔥 ${msg.reacts?.fire || 0}</button>
+                            <button class="react-btn ${likeClass}" data-type="like">👍 ${msg.reacts?.like || 0}</button>
+                            <button class="react-btn ${heartClass}" data-type="heart">❤️ ${msg.reacts?.heart || 0}</button>
+                            <button class="react-btn ${sadClass}" data-type="sad">😢 ${msg.reacts?.sad || 0}</button>
+                            <button class="react-btn ${fireClass}" data-type="fire">🔥 ${msg.reacts?.fire || 0}</button>
                         </div>
                     </div>
                 `;
             });
             container.innerHTML = html;
             container.scrollTop = container.scrollHeight;
+            // прикрепляем обработчики кликов
             document.querySelectorAll(".react-btn").forEach(btn => {
                 btn.onclick = async (e) => {
                     e.stopPropagation();
@@ -352,9 +379,24 @@
                     await db.runTransaction(async (transaction) => {
                         const doc = await transaction.get(msgRef);
                         if (!doc.exists) return;
-                        const reacts = doc.data().reacts || {};
-                        reacts[type] = (reacts[type] || 0) + 1;
-                        transaction.update(msgRef, { reacts });
+                        const data = doc.data();
+                        let reacts = data.reacts || { like:0, heart:0, sad:0, fire:0 };
+                        let userReactions = data.userReactions || {};
+                        const oldReaction = userReactions[userId] || null;
+                        // Если пользователь уже поставил такую же реакцию — удаляем её
+                        if (oldReaction === type) {
+                            reacts[type] = Math.max(0, (reacts[type] || 0) - 1);
+                            delete userReactions[userId];
+                        } else {
+                            // Если была другая реакция — убираем её
+                            if (oldReaction) {
+                                reacts[oldReaction] = Math.max(0, (reacts[oldReaction] || 0) - 1);
+                            }
+                            // Добавляем новую
+                            reacts[type] = (reacts[type] || 0) + 1;
+                            userReactions[userId] = type;
+                        }
+                        transaction.update(msgRef, { reacts, userReactions });
                     });
                 };
             });
@@ -371,7 +413,8 @@
             user: currentUser,
             text: text,
             time: Date.now(),
-            reacts: { like:0, heart:0, sad:0, fire:0 }
+            reacts: { like:0, heart:0, sad:0, fire:0 },
+            userReactions: {}
         });
         input.value = "";
         showToast("💬 отправлено");
@@ -423,10 +466,12 @@
         document.getElementById("chatPanel").classList.remove("active");
     }
 
+    // Тема
     function setTheme(theme) {
-        document.body.classList.remove("light", "mint");
+        document.body.classList.remove("light", "mint", "pink");
         if(theme === "light") document.body.classList.add("light");
         if(theme === "mint") document.body.classList.add("mint");
+        if(theme === "pink") document.body.classList.add("pink");
         localStorage.setItem("shore_theme", theme);
     }
     let savedTheme = localStorage.getItem("shore_theme") || "dark";
@@ -434,10 +479,11 @@
     document.getElementById("themeSelect").value = savedTheme;
     document.getElementById("themeSelect").onchange = (e) => setTheme(e.target.value);
 
+    // Приветственный экран
     if(!localStorage.getItem("welcomed")) {
         let div = document.createElement("div");
         div.className = "welcome-overlay";
-        div.innerHTML = `<div class="welcome-card"><h2>🌊 добро пожаловать на БЕРЕГ</h2><p>выбери слой, напиши что чувствуешь — анонимно, без страха.<br>ставь реакции, меняй имя, дыши.</p><button id="closeWelcome">⟳ начать</button></div>`;
+        div.innerHTML = `<div class="welcome-card"><h2>🌊 добро пожаловать на БЕРЕГ</h2><p>выбери слой, напиши что чувствуешь — анонимно, без страха.<br>ставь реакции (только одну на сообщение), меняй имя, дыши.</p><button id="closeWelcome">⟳ начать</button></div>`;
         document.body.appendChild(div);
         div.querySelector("#closeWelcome").onclick = () => {
             div.remove();
