@@ -2,97 +2,157 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>БЕРЕГ — пространство мыслей</title>
-    <meta name="description" content="Анонимные комнаты, где можно высказаться без страха. Поддержка, личный дневник, тишина.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>Анонимный чат Берег — пространство мыслей</title>
+    <meta name="description" content="Анонимный чат Берег: выскажись без страха. Комнаты по настроению, реакции, полная анонимность. Присоединяйся.">
+    <meta name="keywords" content="анонимный чат, берег, поддержка, выговориться, психология, анонимно, чат без регистрации">
+    <meta name="author" content="Берег">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌊%3C/text%3E%3C/svg%3E">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Базовые переменные */
         :root {
-            --bg: #0a0f16;
-            --card: #111827dd;
-            --border: #2d3a4e;
-            --text: #eef2ff;
-            --text-dim: #8ba0b5;
-            --accent: #4ade80;
-            --accent-dark: #22c55e;
-            --react-bg: #1e293b;
-            --input: #0f172a;
-            --grad-start: rgba(74,222,128,0.1);
-            --grad-end: rgba(74,222,128,0);
+            --bg-dark: #0a0f16;
+            --card-dark: #111827dd;
+            --border-dark: #2d3a4e;
+            --text-dark: #eef2ff;
+            --text-dim-dark: #8ba0b5;
+            --accent-dark: #4ade80;
+            --accent-dark-dark: #22c55e;
+            --react-bg-dark: #1e293b;
+            --input-dark: #0f172a;
+            
+            --bg-light: #eef2f5;
+            --card-light: #ffffffdd;
+            --border-light: #d1dce6;
+            --text-light: #1a2a32;
+            --text-dim-light: #5a6f82;
+            --accent-light: #2c7a5e;
+            --accent-dark-light: #1e5a45;
+            --react-bg-light: #f1f5f9;
+            --input-light: #ffffff;
+            
+            --bg-mint: #c8e6df;
+            --card-mint: #ffffffcc;
+            --border-mint: #9bc4b0;
+            --text-mint: #1a3a2a;
+            --text-dim-mint: #4a7c64;
+            --accent-mint: #3b8b6e;
+            --accent-dark-mint: #2c6b52;
+            --react-bg-mint: #e6f5ed;
+            --input-mint: #ffffff;
+            
+            --bg-ocean: #0a192f;
+            --card-ocean: #112240dd;
+            --border-ocean: #1f3a5f;
+            --text-ocean: #e6f7ff;
+            --text-dim-ocean: #7f9fbf;
+            --accent-ocean: #00b4d8;
+            --accent-dark-ocean: #0077b6;
+            --react-bg-ocean: #1e3a5f;
+            --input-ocean: #0a1a2a;
         }
-        body.light {
-            --bg: #eef2f5;
-            --card: #ffffffdd;
-            --border: #d1dce6;
-            --text: #1a2a32;
-            --text-dim: #5a6f82;
-            --accent: #2c7a5e;
-            --accent-dark: #1e5a45;
-            --react-bg: #f1f5f9;
-            --input: #ffffff;
-            --grad-start: rgba(44,122,94,0.1);
-            --grad-end: rgba(44,122,94,0);
-        }
-        body.mint {
-            --bg: #c8e6df;
-            --card: #ffffffcc;
-            --border: #9bc4b0;
-            --text: #1a3a2a;
-            --text-dim: #4a7c64;
-            --accent: #3b8b6e;
-            --accent-dark: #2c6b52;
-            --react-bg: #e6f5ed;
-            --input: #ffffff;
-            --grad-start: rgba(59,139,110,0.2);
-            --grad-end: rgba(59,139,110,0);
-        }
-        body.pink {
-            --bg: #fce4ec;
-            --card: #ffffffcc;
-            --border: #f48fb1;
-            --text: #4a0025;
-            --text-dim: #ad1457;
-            --accent: #d81b60;
-            --accent-dark: #ad1457;
-            --react-bg: #ffe0f0;
-            --input: #ffffff;
-            --grad-start: rgba(216,27,96,0.15);
-            --grad-end: rgba(216,27,96,0);
-        }
+        
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: system-ui, 'Inter', sans-serif;
+            font-family: system-ui, 'Inter', -apple-system, 'Segoe UI', sans-serif;
             padding: 20px 16px 40px;
-            transition: background 0.3s, color 0.2s;
+            transition: all 0.3s ease;
+            min-height: 100vh;
             position: relative;
             overflow-x: hidden;
-            min-height: 100vh;
         }
-        /* плавная анимация фона */
+        
+        /* Фоновая анимация (волны/блики) */
         body::before {
             content: '';
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 40%, var(--grad-start) 0%, var(--grad-end) 70%);
-            animation: slowRotate 30s linear infinite;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 20% 30%, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 70%);
             pointer-events: none;
-            z-index: 0;
+            z-index: -2;
+            animation: breathe 8s infinite alternate;
         }
-        @keyframes slowRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 2px, transparent 2px, transparent 8px);
+            pointer-events: none;
+            z-index: -1;
         }
-        .app {
-            max-width: 750px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
+        
+        @keyframes breathe {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
         }
+        
+        /* Динамический фон под каждую тему – меняем градиент */
+        body.dark::before { background: radial-gradient(ellipse at 20% 30%, rgba(74,222,128,0.1) 0%, rgba(0,0,0,0) 70%); }
+        body.light::before { background: radial-gradient(ellipse at 20% 30%, rgba(44,122,94,0.1) 0%, rgba(0,0,0,0) 70%); }
+        body.mint::before { background: radial-gradient(ellipse at 20% 30%, rgba(59,139,110,0.15) 0%, rgba(0,0,0,0) 70%); }
+        body.ocean::before { background: radial-gradient(ellipse at 20% 30%, rgba(0,180,216,0.2) 0%, rgba(0,0,0,0) 70%); }
+        
+        /* Применение переменных темы */
+        body.dark {
+            --bg: var(--bg-dark);
+            --card: var(--card-dark);
+            --border: var(--border-dark);
+            --text: var(--text-dark);
+            --text-dim: var(--text-dim-dark);
+            --accent: var(--accent-dark);
+            --accent-dark: var(--accent-dark-dark);
+            --react-bg: var(--react-bg-dark);
+            --input: var(--input-dark);
+        }
+        body.light {
+            --bg: var(--bg-light);
+            --card: var(--card-light);
+            --border: var(--border-light);
+            --text: var(--text-light);
+            --text-dim: var(--text-dim-light);
+            --accent: var(--accent-light);
+            --accent-dark: var(--accent-dark-light);
+            --react-bg: var(--react-bg-light);
+            --input: var(--input-light);
+        }
+        body.mint {
+            --bg: var(--bg-mint);
+            --card: var(--card-mint);
+            --border: var(--border-mint);
+            --text: var(--text-mint);
+            --text-dim: var(--text-dim-mint);
+            --accent: var(--accent-mint);
+            --accent-dark: var(--accent-dark-mint);
+            --react-bg: var(--react-bg-mint);
+            --input: var(--input-mint);
+        }
+        body.ocean {
+            --bg: var(--bg-ocean);
+            --card: var(--card-ocean);
+            --border: var(--border-ocean);
+            --text: var(--text-ocean);
+            --text-dim: var(--text-dim-ocean);
+            --accent: var(--accent-ocean);
+            --accent-dark: var(--accent-dark-ocean);
+            --react-bg: var(--react-bg-ocean);
+            --input: var(--input-ocean);
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
+        
+        .app { max-width: 650px; margin: 0 auto; position: relative; z-index: 2; }
+        
         .glass {
             background: var(--card);
             backdrop-filter: blur(12px);
@@ -100,11 +160,13 @@
             border-radius: 2rem;
             padding: 1.3rem;
             margin-bottom: 1rem;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: transform 0.2s ease, border-color 0.2s;
         }
         .glass:hover {
             border-color: var(--accent);
+            transform: scale(1.01);
         }
+        
         .header {
             display: flex;
             justify-content: space-between;
@@ -113,7 +175,7 @@
             gap: 12px;
         }
         .logo {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 800;
             background: linear-gradient(135deg, var(--accent), #7bc5a4);
             -webkit-background-clip: text;
@@ -128,13 +190,14 @@
             color: var(--text);
             font-family: inherit;
             cursor: pointer;
+            transition: 0.1s;
         }
         .hero {
             text-align: center;
             margin-bottom: 0.5rem;
         }
         .hero h2 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-bottom: 0.5rem;
             background: linear-gradient(135deg, var(--text), var(--accent));
             -webkit-background-clip: text;
@@ -167,26 +230,15 @@
             align-items: center;
             cursor: pointer;
             border: 1px solid var(--border);
-            transition: all 0.1s;
+            transition: all 0.1s ease;
         }
-        .room:active {
-            transform: scale(0.98);
-        }
-        .room-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .room-emoji {
-            font-size: 1.6rem;
-        }
-        .chat-panel {
-            display: none;
-        }
-        .chat-panel.active {
-            display: block;
-            animation: fadeIn 0.2s;
-        }
+        .room:active { transform: scale(0.98); }
+        .room-left { display: flex; align-items: center; gap: 12px; }
+        .room-emoji { font-size: 1.6rem; }
+        
+        .chat-panel { display: none; }
+        .chat-panel.active { display: block; animation: fadeSlide 0.2s ease; }
+        
         .messages {
             background: var(--input);
             border-radius: 1.2rem;
@@ -194,6 +246,7 @@
             height: 420px;
             overflow-y: auto;
             margin-bottom: 12px;
+            scroll-behavior: smooth;
         }
         .msg {
             background: var(--card);
@@ -201,8 +254,8 @@
             padding: 10px;
             margin-bottom: 12px;
             border-left: 3px solid var(--accent);
-            transition: 0.05s;
-            animation: msgSlide 0.1s ease-out;
+            animation: msgPop 0.15s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: transform 0.1s;
         }
         .msg-header {
             display: flex;
@@ -223,8 +276,9 @@
             padding: 2px 8px;
             font-size: 0.7rem;
             cursor: pointer;
-            transition: 0.05s;
+            transition: 0.05s linear;
         }
+        .react-btn:active { transform: scale(0.9); }
         .react-btn.active-reaction {
             background: var(--accent-dark);
             color: white;
@@ -238,60 +292,71 @@
             background: var(--input);
             border: 1px solid var(--border);
             border-radius: 60px;
-            padding: 10px 16px;
+            padding: 12px 16px;
             color: var(--text);
             font-family: inherit;
+            font-size: 1rem;
         }
+        .input-area input:focus { outline: none; border-color: var(--accent); }
         button {
             background: var(--accent-dark);
             border: none;
             border-radius: 40px;
-            padding: 8px 16px;
+            padding: 10px 18px;
             cursor: pointer;
             color: white;
-            font-weight: 500;
-            transition: 0.05s;
+            font-weight: 600;
+            transition: 0.05s linear;
         }
-        button:active {
-            transform: scale(0.96);
-        }
+        button:active { transform: scale(0.96); }
         .toast {
             position: fixed;
-            bottom: 20px;
+            bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--accent-dark);
             color: white;
-            padding: 8px 18px;
+            padding: 8px 20px;
             border-radius: 60px;
+            font-size: 0.85rem;
             opacity: 0;
             transition: 0.2s;
             pointer-events: none;
             z-index: 1100;
+            white-space: nowrap;
         }
         .rules {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-dim);
             text-align: center;
         }
-        .stats {
+        .stats-row {
             display: flex;
             justify-content: space-between;
             margin-top: 8px;
             font-size: 0.7rem;
             color: var(--text-dim);
         }
-        .unique-count, .total-visitors {
-            background: var(--react-bg);
-            padding: 4px 10px;
-            border-radius: 30px;
+        .telegram-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1f3a5f;
+            padding: 8px 16px;
+            border-radius: 40px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: 0.1s;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .telegram-btn:hover { background: #2a4a7a; transform: scale(1.02); }
+        
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes msgSlide {
-            from { opacity: 0; transform: translateX(-8px); }
+        @keyframes msgPop {
+            from { opacity: 0; transform: translateX(-6px); }
             to { opacity: 1; transform: translateX(0); }
         }
     </style>
@@ -301,12 +366,12 @@
 <body>
 <div class="app">
     <div class="header glass">
-        <div class="logo">🌊 БЕРЕГ</div>
+        <div class="logo">🌊 Анонимный чат Берег</div>
         <select id="themeSelect" class="theme-select">
             <option value="dark">🌙 тёмный</option>
             <option value="light">☀️ светлый</option>
             <option value="mint">🍃 мятный</option>
-            <option value="pink">🌸 розовый</option>
+            <option value="ocean">🌊 океан</option>
         </select>
     </div>
 
@@ -318,7 +383,7 @@
         <div class="glass">
             <div class="user-info">
                 <span>✨ твоё имя: <strong id="userName">загрузка...</strong></span>
-                <span id="nameTimer" style="font-size:0.7rem;"></span>
+                <span id="nameTimer" style="font-size:0.7rem; color:var(--text-dim);"></span>
                 <button id="newNameBtn">🌀 другое</button>
             </div>
         </div>
@@ -326,11 +391,14 @@
             <div class="rooms-grid" id="roomsList"></div>
         </div>
         <div class="glass rules">
-            <h4>📜 ПРАВИЛА БЕРЕГА</h4>
-            <p>✅ можно: делиться мыслями, ставить реакции, менять имя, выбирать тему.<br>
-            ❌ нельзя: оскорблять, спамить, выдавать себя за другого.<br>
-            🌊 для кого: для тех, кто устал от шума и хочет выдохнуть.<br>
-            💭 как поможет: ты поймёшь, что ты не один.</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <h4>📜 ПРАВИЛА БЕРЕГА</h4>
+                    <p>✅ можно: делиться мыслями, ставить реакции, менять имя, выбирать тему.<br>
+                    ❌ нельзя: оскорблять, спамить, выдавать себя за другого.</p>
+                </div>
+                <a href="https://t.me/bereg_ru" target="_blank" class="telegram-btn">📱 Telegram-канал</a>
+            </div>
         </div>
     </div>
 
@@ -343,9 +411,9 @@
                 <input type="text" id="msgInput" placeholder="напиши..." autocomplete="off">
                 <button id="sendBtn">📤 отправить</button>
             </div>
-            <div class="stats">
-                <span class="unique-count" id="uniqueCount">👤 уникальных за 24ч: --</span>
-                <span class="total-visitors" id="totalVisitors">🌊 всего посетителей: --</span>
+            <div class="stats-row">
+                <span id="uniqueCount">👤 уникальных за 24ч: --</span>
+                <span id="globalUniqueCount">🌍 всего посетило: --</span>
             </div>
         </div>
     </div>
@@ -353,7 +421,7 @@
 </div>
 
 <script>
-    // ---------- FIREBASE ----------
+    // ---------- FIREBASE (твои ключи) ----------
     const firebaseConfig = {
         apiKey: "AIzaSyBxJ0R3cvRYn3-y1BD1nJ0omB970n-aEPg",
         authDomain: "bereg-7777.firebaseapp.com",
@@ -375,102 +443,174 @@
         { id: "hope", emoji: "🌟", name: "надежда и вера" }
     ];
 
-    // ---------- БОЛЬШОЙ СПИСОК ИМЁН (64 варианта) ----------
+    // ---------- СПИСОК ИМЁН (более 50) ----------
     const namePool = [
         "волна", "луна", "ветер", "тишина", "свет", "море", "песок", "звезда", "туман", "рассвет",
         "закат", "прибой", "чайка", "бриз", "шторм", "шёпот", "радуга", "облако", "роса", "иней",
         "уголь", "пламя", "листва", "корень", "пустота", "эхо", "нить", "соль", "мел", "глина",
         "плед", "лампа", "кот", "лись", "сова", "лось", "ель", "клён", "мох", "гриб",
-        "луч", "тень", "камень", "река", "озеро", "гора", "поле", "лес", "сад", "дождь",
-        "снег", "град", "молния", "гром", "ветка", "лист", "цветок", "трава", "холм", "скала"
+        "луч", "тень", "сон", "снег", "дождь", "град", "туча", "зорька", "роса", "степь"
     ];
 
-    let currentRoom = null;
-    let currentUser = null;
-    let userNameExpiry = null;
-    let unsubscribe = null;
-    let totalVisitors = 0;
-
-    // --- управление именем (24 часа) ---
-    function loadOrCreateUser() {
-        const saved = localStorage.getItem("shore_user");
-        const savedExpiry = localStorage.getItem("shore_user_expiry");
-        const now = Date.now();
-        if (saved && savedExpiry && now < parseInt(savedExpiry)) {
-            currentUser = saved;
-            userNameExpiry = parseInt(savedExpiry);
-        } else {
-            const randomName = namePool[Math.floor(Math.random() * namePool.length)] + "_" + Math.floor(Math.random() * 900 + 100);
-            currentUser = randomName;
-            userNameExpiry = now + 86400000; // 24 часа
-            localStorage.setItem("shore_user", currentUser);
-            localStorage.setItem("shore_user_expiry", userNameExpiry);
-            // увеличить счётчик всех посетителей
-            let total = localStorage.getItem("total_visitors");
-            total = total ? parseInt(total) + 1 : 1;
-            localStorage.setItem("total_visitors", total);
-            document.getElementById("totalVisitors").innerText = `🌊 всего посетителей: ${total}`;
-        }
-        document.getElementById("userName").innerText = currentUser;
-        updateNameTimer();
+    // ---------- УНИКАЛЬНЫЙ ID ДЛЯ ПОЛЬЗОВАТЕЛЯ (для реакций и счётчиков) ----------
+    let clientId = localStorage.getItem("clientId");
+    if (!clientId) {
+        clientId = crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random();
+        localStorage.setItem("clientId", clientId);
     }
 
+    // ---------- УПРАВЛЕНИЕ ИМЕНЕМ (24 часа) ----------
+    let currentUser = localStorage.getItem("shore_user");
+    let userNameExpiry = localStorage.getItem("shore_user_expiry");
+    const now = Date.now();
+    if (!currentUser || !userNameExpiry || now > parseInt(userNameExpiry)) {
+        const randomName = namePool[Math.floor(Math.random() * namePool.length)] + "_" + Math.floor(Math.random() * 900 + 100);
+        currentUser = randomName;
+        localStorage.setItem("shore_user", currentUser);
+        const expiry = now + 86400000; // 24 часа
+        localStorage.setItem("shore_user_expiry", expiry);
+    }
+    document.getElementById("userName").innerText = currentUser;
+
+    // Таймер до смены имени
     function updateNameTimer() {
-        const remaining = userNameExpiry - Date.now();
+        const expiry = parseInt(localStorage.getItem("shore_user_expiry"));
+        if (!expiry) return;
+        const remaining = expiry - Date.now();
         if (remaining <= 0) {
-            loadOrCreateUser();
+            location.reload();
             return;
         }
         const hours = Math.floor(remaining / 3600000);
         const minutes = Math.floor((remaining % 3600000) / 60000);
-        document.getElementById("nameTimer").innerHTML = `⏳ ${hours}ч ${minutes}м`;
+        document.getElementById("nameTimer").innerText = `🕒 ${hours}ч ${minutes}м`;
         setTimeout(updateNameTimer, 60000);
     }
+    updateNameTimer();
 
-    function forceNewName() {
+    document.getElementById("newNameBtn").onclick = () => {
         const newName = namePool[Math.floor(Math.random() * namePool.length)] + "_" + Math.floor(Math.random() * 900 + 100);
         currentUser = newName;
-        userNameExpiry = Date.now() + 86400000;
         localStorage.setItem("shore_user", currentUser);
-        localStorage.setItem("shore_user_expiry", userNameExpiry);
+        localStorage.setItem("shore_user_expiry", Date.now() + 86400000);
         document.getElementById("userName").innerText = currentUser;
-        updateNameTimer();
-        showToast("🌀 новое имя выдано на 24 часа");
-        // не увеличиваем total_visitors при принудительной смене
+        showToast("🌀 теперь ты " + currentUser);
+    };
+
+    // ---------- СЧЁТЧИКИ ПОСЕТИТЕЛЕЙ ----------
+    let globalVisitorCount = 0;
+    let roomVisitorCounts = {};
+
+    async function registerVisitor() {
+        const visitorRef = db.collection("stats").doc("global");
+        const roomVisitorRef = db.collection("roomStats").doc("counting");
+        await db.runTransaction(async (transaction) => {
+            const doc = await transaction.get(visitorRef);
+            const current = doc.exists ? doc.data().count || 0 : 0;
+            transaction.set(visitorRef, { count: current + 1 });
+        });
+    }
+    registerVisitor();
+
+    // отображение глобального счётчика
+    async function updateGlobalCounter() {
+        const doc = await db.collection("stats").doc("global").get();
+        const count = doc.exists ? doc.data().count || 0 : 0;
+        document.getElementById("globalUniqueCount").innerText = `🌍 всего посетило: ${count}`;
+    }
+    updateGlobalCounter();
+
+    // счётчик уникальных в комнате за 24ч (на основе clientId)
+    let currentRoomIdForStats = null;
+    async function registerRoomVisit(roomId) {
+        if (currentRoomIdForStats === roomId) return;
+        currentRoomIdForStats = roomId;
+        const roomStatRef = db.collection("roomDailyVisitors").doc(roomId);
+        const today = new Date().toISOString().slice(0,10);
+        await db.runTransaction(async (transaction) => {
+            const doc = await transaction.get(roomStatRef);
+            let data = doc.exists ? doc.data() : {};
+            let clients = data[today] || [];
+            if (!clients.includes(clientId)) {
+                clients.push(clientId);
+                data[today] = clients;
+                transaction.set(roomStatRef, data);
+            }
+        });
+        // обновить отображение
+        const doc = await db.collection("roomDailyVisitors").doc(roomId).get();
+        const clientsToday = doc.exists ? (doc.data()[new Date().toISOString().slice(0,10)] || []) : [];
+        document.getElementById("uniqueCount").innerHTML = `👤 уникальных за 24ч: ${clientsToday.length}`;
     }
 
-    // --- реакции (один пользователь — одна реакция) ---
+    // ---------- РЕАКЦИИ: один пользователь – одна реакция ----------
     async function setReaction(roomId, msgId, reactionType) {
-        const userId = localStorage.getItem("shore_user") || currentUser;
-        const reactionDocRef = db.collection("rooms").doc(roomId).collection("messages").doc(msgId).collection("reactions").doc(userId);
+        const userReactionRef = db.collection("userReactions").doc(`${clientId}_${msgId}`);
         const msgRef = db.collection("rooms").doc(roomId).collection("messages").doc(msgId);
         await db.runTransaction(async (transaction) => {
-            const reactionDoc = await transaction.get(reactionDocRef);
+            const userReactDoc = await transaction.get(userReactionRef);
+            const currentReaction = userReactDoc.exists ? userReactDoc.data().type : null;
             const msgDoc = await transaction.get(msgRef);
             if (!msgDoc.exists) return;
-            let currentReacts = msgDoc.data().reacts || { like:0, heart:0, sad:0, fire:0 };
-            if (reactionDoc.exists) {
-                const oldType = reactionDoc.data().type;
-                if (oldType === reactionType) {
-                    // снять реакцию
-                    currentReacts[oldType] = Math.max(0, (currentReacts[oldType] || 0) - 1);
-                    transaction.delete(reactionDocRef);
-                } else {
-                    // заменить реакцию
-                    currentReacts[oldType] = Math.max(0, (currentReacts[oldType] || 0) - 1);
-                    currentReacts[reactionType] = (currentReacts[reactionType] || 0) + 1;
-                    transaction.set(reactionDocRef, { type: reactionType });
-                }
+            const reacts = msgDoc.data().reacts || {};
+            if (currentReaction === reactionType) {
+                // убираем реакцию
+                reacts[reactionType] = Math.max(0, (reacts[reactionType] || 0) - 1);
+                transaction.update(msgRef, { reacts });
+                transaction.delete(userReactionRef);
             } else {
-                // новая реакция
-                currentReacts[reactionType] = (currentReacts[reactionType] || 0) + 1;
-                transaction.set(reactionDocRef, { type: reactionType });
+                // убираем старую реакцию, если была
+                if (currentReaction && reacts[currentReaction] > 0) {
+                    reacts[currentReaction] = Math.max(0, (reacts[currentReaction] || 0) - 1);
+                }
+                // добавляем новую
+                reacts[reactionType] = (reacts[reactionType] || 0) + 1;
+                transaction.update(msgRef, { reacts });
+                transaction.set(userReactionRef, { type: reactionType });
             }
-            transaction.update(msgRef, { reacts: currentReacts });
         });
     }
 
-    // --- отправка сообщения ---
+    // ---------- ОТПРАВКА/ПОЛУЧЕНИЕ СООБЩЕНИЙ ----------
+    let unsubscribe = null;
+    let currentRoom = null;
+
+    function renderMessagesSnapshot(roomId) {
+        if (unsubscribe) unsubscribe();
+        const messagesRef = db.collection("rooms").doc(roomId).collection("messages").orderBy("time", "asc");
+        unsubscribe = messagesRef.onSnapshot(snapshot => {
+            const container = document.getElementById("msgContainer");
+            if (!container) return;
+            let html = "";
+            snapshot.forEach(doc => {
+                const msg = doc.data();
+                html += `
+                    <div class="msg" data-id="${doc.id}">
+                        <div class="msg-header"><span>🌊 ${escapeHtml(msg.user)}</span><span>${new Date(msg.time).toLocaleTimeString()}</span></div>
+                        <div>${escapeHtml(msg.text)}</div>
+                        <div class="react-buttons">
+                            <button class="react-btn" data-type="like">👍 ${msg.reacts?.like || 0}</button>
+                            <button class="react-btn" data-type="heart">❤️ ${msg.reacts?.heart || 0}</button>
+                            <button class="react-btn" data-type="sad">😢 ${msg.reacts?.sad || 0}</button>
+                            <button class="react-btn" data-type="fire">🔥 ${msg.reacts?.fire || 0}</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+            document.querySelectorAll(".react-btn").forEach(btn => {
+                btn.onclick = async (e) => {
+                    e.stopPropagation();
+                    const type = btn.getAttribute("data-type");
+                    const msgDiv = btn.closest(".msg");
+                    const msgId = msgDiv.getAttribute("data-id");
+                    await setReaction(roomId, msgId, type);
+                };
+            });
+        });
+    }
+
     async function sendMessage() {
         const input = document.getElementById("msgInput");
         const text = input.value.trim();
@@ -487,55 +627,6 @@
         showToast("💬 отправлено");
     }
 
-    // --- отображение сообщений и реакций ---
-    function renderMessagesSnapshot(roomId) {
-        if (unsubscribe) unsubscribe();
-        const messagesRef = db.collection("rooms").doc(roomId).collection("messages").orderBy("time", "asc");
-        unsubscribe = messagesRef.onSnapshot(async (snapshot) => {
-            const container = document.getElementById("msgContainer");
-            if (!container) return;
-            let html = "";
-            const userId = localStorage.getItem("shore_user") || currentUser;
-            for (const doc of snapshot.docs) {
-                const msg = doc.data();
-                // получаем тип реакции текущего пользователя
-                const reactionDoc = await db.collection("rooms").doc(roomId).collection("messages").doc(doc.id).collection("reactions").doc(userId).get();
-                const userReaction = reactionDoc.exists ? reactionDoc.data().type : null;
-                html += `
-                    <div class="msg" data-id="${doc.id}">
-                        <div class="msg-header"><span>🌊 ${escapeHtml(msg.user)}</span><span>${new Date(msg.time).toLocaleTimeString()}</span></div>
-                        <div>${escapeHtml(msg.text)}</div>
-                        <div class="react-buttons">
-                            <button class="react-btn ${userReaction === 'like' ? 'active-reaction' : ''}" data-type="like">👍 ${msg.reacts?.like || 0}</button>
-                            <button class="react-btn ${userReaction === 'heart' ? 'active-reaction' : ''}" data-type="heart">❤️ ${msg.reacts?.heart || 0}</button>
-                            <button class="react-btn ${userReaction === 'sad' ? 'active-reaction' : ''}" data-type="sad">😢 ${msg.reacts?.sad || 0}</button>
-                            <button class="react-btn ${userReaction === 'fire' ? 'active-reaction' : ''}" data-type="fire">🔥 ${msg.reacts?.fire || 0}</button>
-                        </div>
-                    </div>
-                `;
-            }
-            container.innerHTML = html;
-            container.scrollTop = container.scrollHeight;
-            // прикрепить обработчики реакций
-            document.querySelectorAll(".msg").forEach(msgDiv => {
-                const msgId = msgDiv.getAttribute("data-id");
-                msgDiv.querySelectorAll(".react-btn").forEach(btn => {
-                    btn.onclick = async (e) => {
-                        e.stopPropagation();
-                        const type = btn.getAttribute("data-type");
-                        await setReaction(roomId, msgId, type);
-                    };
-                });
-            });
-            // подсчёт уникальных никнеймов в комнате за 24ч
-            const now = Date.now();
-            const dayAgo = now - 86400000;
-            const allMessages = snapshot.docs.map(d => d.data());
-            const uniqueNames = new Set(allMessages.filter(m => m.time > dayAgo).map(m => m.user));
-            document.getElementById("uniqueCount").innerHTML = `👤 уникальных за 24ч: ${uniqueNames.size}`;
-        });
-    }
-
     function escapeHtml(str) {
         return str.replace(/[&<>]/g, function(m) {
             if(m === '&') return '&amp;';
@@ -545,15 +636,15 @@
         });
     }
 
-    function showToast(msg) {
-        const toast = document.getElementById("toast");
-        toast.innerText = msg;
+    function showToast(t) {
+        let toast = document.getElementById("toast");
+        toast.innerText = t;
         toast.style.opacity = "1";
         setTimeout(() => toast.style.opacity = "0", 1500);
     }
 
     function renderRooms() {
-        const container = document.getElementById("roomsList");
+        let container = document.getElementById("roomsList");
         container.innerHTML = rooms.map(room => `
             <div class="room" data-id="${room.id}">
                 <div class="room-left"><div class="room-emoji">${room.emoji}</div><div>${room.name}</div></div>
@@ -565,14 +656,15 @@
         });
     }
 
-    function openChat(roomId) {
+    async function openChat(roomId) {
         if (currentRoom && unsubscribe) unsubscribe();
         currentRoom = roomId;
-        const room = rooms.find(r => r.id === roomId);
+        let room = rooms.find(r => r.id === roomId);
         document.getElementById("roomTitle").innerText = room.emoji + " " + room.name;
         document.getElementById("mainPanel").style.display = "none";
         document.getElementById("chatPanel").classList.add("active");
         renderMessagesSnapshot(roomId);
+        await registerRoomVisit(roomId);
     }
 
     function closeChat() {
@@ -582,40 +674,36 @@
         document.getElementById("chatPanel").classList.remove("active");
     }
 
-    // --- темы ---
+    // ---------- ТЕМЫ ----------
     function setTheme(theme) {
-        document.body.classList.remove("light", "mint", "pink");
-        if (theme === "light") document.body.classList.add("light");
-        else if (theme === "mint") document.body.classList.add("mint");
-        else if (theme === "pink") document.body.classList.add("pink");
+        document.body.classList.remove("dark", "light", "mint", "ocean");
+        document.body.classList.add(theme);
         localStorage.setItem("shore_theme", theme);
     }
-    const savedTheme = localStorage.getItem("shore_theme") || "dark";
+    let savedTheme = localStorage.getItem("shore_theme") || "dark";
     setTheme(savedTheme);
     document.getElementById("themeSelect").value = savedTheme;
     document.getElementById("themeSelect").onchange = (e) => setTheme(e.target.value);
 
-    // --- инициализация ---
-    loadOrCreateUser();
-    renderRooms();
-
-    // --- обработчики кнопок ---
-    document.getElementById("newNameBtn").onclick = forceNewName;
-    document.getElementById("backBtn").onclick = closeChat;
-    document.getElementById("sendBtn").onclick = sendMessage;
-    document.getElementById("msgInput").addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
-
-    // --- приветствие (один раз) ---
-    if (!localStorage.getItem("welcomed")) {
-        const div = document.createElement("div");
+    // ПРИВЕТСТВИЕ
+    if(!localStorage.getItem("welcomed")) {
+        let div = document.createElement("div");
         div.className = "welcome-overlay";
-        div.innerHTML = `<div class="welcome-card"><h2>🌊 добро пожаловать на БЕРЕГ</h2><p>выбери слой, напиши что чувствуешь — анонимно, без страха.<br>ставь реакции, меняй имя, дыши.</p><button id="closeWelcome">⟳ начать</button></div>`;
+        div.innerHTML = `<div class="welcome-card"><h2>🌊 добро пожаловать в анонимный чат Берег</h2><p>выбери слой, напиши что чувствуешь — анонимно, без страха.<br>ставь реакции, меняй имя, дыши.</p><button id="closeWelcome">⟳ начать</button></div>`;
         document.body.appendChild(div);
         div.querySelector("#closeWelcome").onclick = () => {
             div.remove();
             localStorage.setItem("welcomed", "true");
         };
     }
+
+    document.getElementById("backBtn").onclick = closeChat;
+    document.getElementById("sendBtn").onclick = sendMessage;
+    document.getElementById("msgInput").addEventListener("keypress", (e) => { if(e.key === "Enter") sendMessage(); });
+    renderRooms();
+    setInterval(() => {
+        updateGlobalCounter();
+    }, 60000);
 </script>
 </body>
 </html>
